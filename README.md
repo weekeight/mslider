@@ -11,7 +11,7 @@ A very simple jQuery slider plugin for mobile
 
 ### basic html
 
-```
+```html
   <div class="mslider J_MSlider">
     <ul>
       <li>
@@ -29,7 +29,7 @@ A very simple jQuery slider plugin for mobile
 
 ### basic css
 
-```
+```css
 .mslider *{
     margin: 0;
     padding: 0;
@@ -90,7 +90,7 @@ A very simple jQuery slider plugin for mobile
 
 ### initialize instance
 
-```
+```javascript
 <script>
 $('.J_MSlider').MSlider();
 <script>
