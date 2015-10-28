@@ -11,11 +11,11 @@ module.exports = {
     'jquery': 'jQuery'
   },
   plugins: [
-    // new webpack.optimize.UglifyJsPlugin({
-    //   compress: {
-    //     warnings: false
-    //   },
-    //   minimize: true
-    // })
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      },
+      minimize: true
+    })
   ]
 };

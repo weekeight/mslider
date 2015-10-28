@@ -30,14 +30,15 @@
       'overflow': 'hidden'
     });
     items$.css({
-      'width': item$.length * 100 + '%'
+      'width': data.itemLength * 100 + '%'
     });
     item$.css({
       'float': 'left',
-      'width': 100/item$.length + '%'
+      'width': 100/data.itemLength + '%'
     });
   };
 
+  // add bottom nav bar based on "dots" setting
   var _addBottomBar = function(){
     var this$ = this;
     var data = this$.data('MSlider');
@@ -69,15 +70,14 @@
       var curItemIndex = item$.index(currentTarget$);
       data.curItemIndex = curItemIndex;
 
-      // console.log('touchstart curItemIndex:'+ data.curItemIndex);
       if(data.playTimer || data.playAgainTimer){
         methods['stop'].call(this$);
       }
       items$.css({
         WebkitTransition: '',
         transition: '',
-        WebkitTransform: 'translate3d(' + -data.curItemIndex*100/item$.length + '%,0px,0px)',
-        transform: 'translate3d(' + -data.curItemIndex*100/item$.length + '%,0px,0px)'
+        WebkitTransform: 'translate3d(' + -data.curItemIndex*100/data.itemLength + '%,0px,0px)',
+        transform: 'translate3d(' + -data.curItemIndex*100/data.itemLength + '%,0px,0px)'
       });
       data.startPageX = (ev.originalEvent.touches ? ev.originalEvent.touches[0] : ev.originalEvent).pageX;
     });
@@ -90,12 +90,10 @@
       var distance = curPageX - data.startPageX;
       var transformLeft = -data.curItemIndex * data.singleItemWidth + distance;
       data.distance = distance;
-      console.log(data.singleItemWidth);
       items$.css({
         WebkitTransform: 'translate3d(' + transformLeft + 'px,0px,0px)',
         transform: 'translate3d(' + transformLeft + 'px,0px,0px)'
       });
-      console.log('touchmove');
 
     });
 
@@ -113,7 +111,6 @@
       }
 
       methods['to'].call(this$, nextIndex);
-      console.log('touchend...');
     });
   };
 
@@ -151,7 +148,6 @@
           _initCss.call(this$);
           // add bottom nav bar
           settings.dots && _addBottomBar.call(this$);
-
           data.singleItemWidth = $(item$[0]).outerWidth();
           // bind touch/touchmove/touchend event
           _bindEvent.call(this$);
@@ -163,10 +159,10 @@
     destroy: function(){
       return this.each(function(index){
         var this$ = $(this);
-        var data = this$.data('MSlider');
 
-        //@TODO remove all events
-
+        // remove all events and data
+        methods['stop'].call(this$);
+        this$.unbind('mslider');
         this$.removeData('MSlider');
       });
     },
@@ -212,7 +208,7 @@
         var items$ = this$.find(settings.items);
         var item$ = items$.find(settings.item);
 
-        var transformLeft = -targetItemIndex * 100/item$.length;
+        var transformLeft = -targetItemIndex * 100/data.itemLength;
 
         if(data.playTimer){
           methods['stop'].call(this$);
