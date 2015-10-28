@@ -1,5 +1,6 @@
 /*!
 * jQuery MSlider Plugin v1.0.0
+* https://github.com/weekeight/mslider
 *
 * Copyright 2015 weekeight
 * Released under the MIT license
