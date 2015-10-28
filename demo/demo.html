@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+  <meta name="referrer" content="origin-when-cross-origin">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no">
+  <title>mslier demo</title>
+  <style>
+  /* component style */
+  *{
+    margin: 0;
+    padding: 0;
+  }
+  .mslider{
+    position: relative;
+    overflow: hidden;
+  }
+  .mslider li{
+    float: left;
+    list-style: none;
+  }
+  .mslider .dots{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 20px;
+    margin: 0;
+  }
+  .mslider .dots .dot{
+    -webkit-filter: drop-shadow(0 1px 2px rgba(0,0,0,.3));
+    -moz-filter: drop-shadow(0 1px 2px rgba(0,0,0,.3));
+    -ms-filter: drop-shadow(0 1px 2px rgba(0,0,0,.3));
+    -o-filter: drop-shadow(0 1px 2px rgba(0,0,0,.3));
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,.3));
+
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    overflow: hidden;
+    margin: 0 4px;
+
+    text-indent: -999em;
+
+    border: 2px solid #fff;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+
+    cursor: pointer;
+    opacity: .4;
+
+    -webkit-transition: background .5s, opacity .5s;
+    -moz-transition: background .5s, opacity .5s;
+    transition: background .5s, opacity .5s;
+  }
+  .mslider .dots .dot.active{
+    background: #fff;
+    opacity: 1;
+  }
+
+
+  /* page style*/
+  h1{
+    margin-bottom: 50px;
+    padding: 15px 20px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #0269c2;
+  }
+  .mslider li img{
+    width: 100%;
+  }
+  </style>
+</head>
+<body>
+  <h1>Welcome to mslider</h1>
+  <div class="mslider J_MSlider">
+    <ul>
+      <li>
+        <img src="http://dummyimage.com/400x300/000/fff" alt="">
+      </li>
+      <li>
+        <img src="http://dummyimage.com/400x300/999/f00" alt="">
+      </li>
+      <li>
+        <img src="http://dummyimage.com/400x300/222/0f0" alt="">
+      </li>
+    </ul>
+  </div>
+  <script src="./lib/jquery-2.1.4.js"></script>
+  <script src="../build/mslider.min.js"></script>
+
+  <script>
+  $('.J_MSlider').MSlider();
+  </script>
+</body>
+</html>
