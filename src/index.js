@@ -68,8 +68,8 @@
     var item$ = items$.find(settings.item);
 
     settings.touchmove && items$.delegate(settings.item, 'mousedown.mslider touchstart.mslider', function(ev){
-      ev.preventDefault();
-      ev.stopPropagation();
+      settings.preventDefault && ev.preventDefault();
+       settings.stopPropagation && ev.stopPropagation();
 
       var currentTarget$ = $(ev.currentTarget);
       var curItemIndex = item$.index(currentTarget$);
@@ -95,8 +95,8 @@
     });
 
     settings.touchmove && items$.delegate(settings.item, 'mousemove.mslider touchmove.mslider', function(ev){
-      ev.preventDefault();
-      ev.stopPropagation();
+      settings.preventDefault && ev.preventDefault();
+       settings.stopPropagation && ev.stopPropagation();
 
       var curPageX = (ev.originalEvent.touches ? ev.originalEvent.touches[0] : ev.originalEvent).pageX;
       var distance = curPageX - data.startPageX;
@@ -110,8 +110,8 @@
     });
 
     settings.touchmove && items$.delegate(settings.item, 'mouseup.mslider touchend.mslider', function(ev){
-      ev.preventDefault();
-      ev.stopPropagation();
+      settings.preventDefault && ev.preventDefault();
+       settings.stopPropagation && ev.stopPropagation();
       var nextIndex = data.curItemIndex;
       if(data.distance > 0){
         nextIndex = data.curItemIndex - 1 < 0 ? 0 : data.curItemIndex - 1;
@@ -137,7 +137,9 @@
         item: '>li',    // slidable items selector
         easing: 'ease',// easing function to use for animation
         autoplay: true,  // autoplay after initialisation
-        touchmove: true // surpport touch event(boolean)
+        touchmove: true, // surpport touch event(boolean)
+        stopPropagation: false,
+        preventDefault: false
       }, options);
 
       return self.each(function(index){
