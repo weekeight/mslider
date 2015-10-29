@@ -107,7 +107,6 @@ $('.J_MSlider').MSlider();
 - easing: 'ease' // easing function to use for animation
 - autoplay: true  // autoplay after initialisation
 - touchmove: true // surpport touch event(boolean)
-- preventDefault  //(boolean)
 - stopPropagation //(boolean)
 
 ## Methods

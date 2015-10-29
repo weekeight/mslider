@@ -68,8 +68,7 @@
     var item$ = items$.find(settings.item);
 
     settings.touchmove && items$.delegate(settings.item, 'mousedown.mslider touchstart.mslider', function(ev){
-      settings.preventDefault && ev.preventDefault();
-       settings.stopPropagation && ev.stopPropagation();
+      if(data.animationing) return;
 
       var currentTarget$ = $(ev.currentTarget);
       var curItemIndex = item$.index(currentTarget$);
@@ -95,8 +94,10 @@
     });
 
     settings.touchmove && items$.delegate(settings.item, 'mousemove.mslider touchmove.mslider', function(ev){
-      settings.preventDefault && ev.preventDefault();
-       settings.stopPropagation && ev.stopPropagation();
+      if(data.animationing) return;
+
+      ev.preventDefault();
+      settings.stopPropagation && ev.stopPropagation();
 
       var curPageX = (ev.originalEvent.touches ? ev.originalEvent.touches[0] : ev.originalEvent).pageX;
       var distance = curPageX - data.startPageX;
@@ -110,8 +111,8 @@
     });
 
     settings.touchmove && items$.delegate(settings.item, 'mouseup.mslider touchend.mslider', function(ev){
-      settings.preventDefault && ev.preventDefault();
-       settings.stopPropagation && ev.stopPropagation();
+      if(data.animationing) return;
+
       var nextIndex = data.curItemIndex;
       if(data.distance > 0){
         nextIndex = data.curItemIndex - 1 < 0 ? 0 : data.curItemIndex - 1;
@@ -138,8 +139,7 @@
         easing: 'ease',// easing function to use for animation
         autoplay: true,  // autoplay after initialisation
         touchmove: true, // surpport touch event(boolean)
-        stopPropagation: false,
-        preventDefault: false
+        stopPropagation: false
       }, options);
 
       return self.each(function(index){
@@ -240,6 +240,7 @@
           methods['stop'].call(this$);
         }
 
+        data.animationing = true;
         items$.css({
           WebkitTransition: '-webkit-transform ' + settings.speed + 'ms ' + settings.easing,
           transition: 'transform ' + settings.speed + 'ms ' + settings.easing,
@@ -251,6 +252,8 @@
           var targetItem$ = $(item$[targetItemIndex]);
           var realItemIndex = parseInt(targetItem$.attr('data-real-index'));
           var transitionEndIndex = 0;
+
+          data.animationing = false;
 
           // for loop touchmove item
           if((targetItemIndex === (data.itemLength - 1)) || (targetItemIndex === 0)){
