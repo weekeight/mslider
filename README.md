@@ -6,6 +6,7 @@ A very simple jQuery slider plugin for mobile
 - autoplay
 - fluid width
 - bottom nav bar
+- loop infinitely
 
 ## Usage
 

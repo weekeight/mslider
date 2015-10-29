@@ -31,7 +31,11 @@
       'overflow': 'hidden'
     });
     items$.css({
-      'width': data.itemLength * 100 + '%'
+      'width': data.itemLength * 100 + '%',
+      'WebkitTransition': '',
+      'transition': '',
+      'WebkitTransform': 'translate3d('+ -100/data.itemLength +'%, 0px, 0px)',
+      'transform': 'translate3d('+ -100/data.itemLength +'%, 0px, 0px)'
     });
     item$.css({
       'float': 'left',
@@ -49,7 +53,7 @@
 
     var bottomBarHtml = '<ol class="dots">';
 
-    for(var i = 0; i < item$.length; i++){
+    for(var i = 0; i < item$.length - 2; i++){
       bottomBarHtml += '<li class="dot '+ (i === 0 ? 'active' : '') +'"></li>';
     }
     bottomBarHtml += '</ol>';
@@ -69,6 +73,13 @@
 
       var currentTarget$ = $(ev.currentTarget);
       var curItemIndex = item$.index(currentTarget$);
+      var shoulItemIndex = 0;
+
+      // for looping animation
+      if(curItemIndex === 0 || curItemIndex === data.itemLength - 1){
+        (curItemIndex === (data.itemLength - 1)) && (curItemIndex = 1);
+        (curItemIndex === 0) && (curItemIndex = data.itemLength - 2);
+      }
       data.curItemIndex = curItemIndex;
 
       if(data.playTimer || data.playAgainTimer){
@@ -101,7 +112,6 @@
     settings.touchmove && items$.delegate(settings.item, 'mouseup.mslider touchend.mslider', function(ev){
       ev.preventDefault();
       ev.stopPropagation();
-
       var nextIndex = data.curItemIndex;
       if(data.distance > 0){
         nextIndex = data.curItemIndex - 1 < 0 ? 0 : data.curItemIndex - 1;
@@ -111,6 +121,7 @@
         nextIndex = data.curItemIndex;
       }
 
+      data.distance = 0;
       methods['to'].call(this$, nextIndex);
     });
   };
@@ -135,13 +146,25 @@
         var items$ = this$.find(settings.items);
         var item$ = items$.find(settings.item);
 
+        item$.each(function(index){
+          var this$ = $(this);
+
+          // set real index before append clone element
+          this$.attr('data-real-index', index);
+        });
+
+        // add two fade item for looping animation
+        items$.prepend(item$.last().clone(true, true).addClass('clone'));
+        items$.append(item$.first().clone(true, true).addClass('clone'));
+
         // If the plugin hasn't been initialized yet...
         if(!data){
           var data = {
             target: this$,
             settings: settings,
-            curItemIndex: 0,
-            itemLength: item$.length
+            curItemIndex: 1, // not 0, because of the copy item appended at first position
+            realItemLength: item$.length,
+            itemLength: item$.length + 2
           };
           this$.data('MSlider', data);
 
@@ -178,9 +201,9 @@
           methods['stop'].call(this$);
         }
         data.playTimer = setInterval(function(){
-          if(data.curItemIndex + 1 >= data.itemLength){
-            data.curItemIndex = 0;
-            methods['to'].call(this$, 0);
+          if(data.curItemIndex + 1 >= data.itemLength - 1){
+            data.curItemIndex = 1;
+            methods['to'].call(this$, 1);
           }else{
             methods['to'].call(this$, data.curItemIndex + 1);
           }
@@ -223,9 +246,28 @@
         });
 
         data.playAgainTimer = setTimeout(function(){
+          var targetItem$ = $(item$[targetItemIndex]);
+          var realItemIndex = parseInt(targetItem$.attr('data-real-index'));
+          var transitionEndIndex = 0;
+
+          // for loop touchmove item
+          if((targetItemIndex === (data.itemLength - 1)) || (targetItemIndex === 0)){
+            (targetItemIndex === (data.itemLength - 1)) && (transitionEndIndex = 1);
+            (targetItemIndex === 0) && (transitionEndIndex = data.itemLength - 2);
+
+            // go the real index item
+            items$.css({
+              WebkitTransition: '',
+              transition: '',
+              WebkitTransform: 'translate3d(' + -transitionEndIndex*100/data.itemLength + '%,0px,0px)',
+              transform: 'translate3d(' + -transitionEndIndex*100/data.itemLength + '%,0px,0px)'
+            });
+          }
+
           // bottom bar dots status
           this$.find('.dots .active').removeClass('active');
-          $(this$.find('.dots .dot')[targetItemIndex]).addClass('active');
+          $(this$.find('.dots .dot')[realItemIndex]).addClass('active');
+
           data.curItemIndex = targetItemIndex;
           settings.autoplay && methods['play'].call(this$);
         }, settings.speed);
