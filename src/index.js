@@ -68,6 +68,8 @@
     var item$ = items$.find(settings.item);
 
     settings.touchmove && items$.delegate(settings.item, 'mousedown.mslider touchstart.mslider', function(ev){
+      settings.stopPropagation && ev.stopPropagation();
+
       if(data.animationing) return;
 
       var currentTarget$ = $(ev.currentTarget);
@@ -94,10 +96,10 @@
     });
 
     settings.touchmove && items$.delegate(settings.item, 'mousemove.mslider touchmove.mslider', function(ev){
-      if(data.animationing) return;
-
       ev.preventDefault();
       settings.stopPropagation && ev.stopPropagation();
+
+      if(data.animationing) return;
 
       var curPageX = (ev.originalEvent.touches ? ev.originalEvent.touches[0] : ev.originalEvent).pageX;
       var distance = curPageX - data.startPageX;
@@ -111,6 +113,8 @@
     });
 
     settings.touchmove && items$.delegate(settings.item, 'mouseup.mslider touchend.mslider', function(ev){
+      settings.stopPropagation && ev.stopPropagation();
+
       if(data.animationing) return;
 
       var nextIndex = data.curItemIndex;
